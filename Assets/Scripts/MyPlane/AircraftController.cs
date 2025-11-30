@@ -219,9 +219,9 @@ public class AircraftController : MonoBehaviour
         GUILayout.BeginArea(new Rect(10, 10, 500, 700));
 
         GUI.color = Color.white;
-        GUILayout.Label("=== AIRCRAFT PHYSICS DEBUG ===");
+        GUILayout.Label("=== Plane Controls ===");
 
-        // Speed and movement
+        
         float speedChange = _speed - _lastVelocity.magnitude;
         GUI.color = speedChange > 0 ? Color.green : Color.red;
         GUILayout.Label($"Speed: {_speed:0.0} m/s (Δ: {speedChange:0.0})");
@@ -230,15 +230,15 @@ public class AircraftController : MonoBehaviour
         GUILayout.Label($"Altitude: {transform.position.y:0.0} m");
         GUILayout.Label($"Throttle: {_currentThrottle * 100:0}%");
 
-        // Velocity analysis - ВАЖНО!
+        
         Vector3 localVel = transform.InverseTransformDirection(_rb.linearVelocity);
-        GUI.color = Color.yellow;
+        GUI.color = Color.white;
         GUILayout.Label($"Local Velocity:");
         GUILayout.Label($"  Forward: {localVel.z:0.0}");
         GUILayout.Label($"  Right: {localVel.x:0.0}");
         GUILayout.Label($"  Up: {localVel.y:0.0}");
 
-        // Direction analysis
+        
         Vector3 velocityDir = _rb.linearVelocity.normalized;
         Vector3 forwardDir = transform.forward;
         float alignment = Vector3.Dot(velocityDir, forwardDir);
@@ -247,21 +247,19 @@ public class AircraftController : MonoBehaviour
         GUILayout.Label($"Forward Dir: {forwardDir}");
         GUILayout.Label($"Velocity Dir: {velocityDir}");
 
-        // Input
+       
         GUILayout.Label($"Mouse Input: X:{_mouseInput.x:0.00} Y:{_mouseInput.y:0.00}");
         GUILayout.Label($"Yaw Input: {_keyboardYaw:0.00}");
 
-        // Angles
+        
         GUILayout.Label($"Pitch: {transform.eulerAngles.x:0.0}°");
         GUILayout.Label($"Roll: {transform.eulerAngles.z:0.0}°");
         GUILayout.Label($"Yaw: {transform.eulerAngles.y:0.0}°");
 
-        // Controls
+        
         GUI.color = Color.white;
-        GUILayout.Label("=== CONTROLS ===");
+        GUILayout.Label("=== controls ===");
         GUILayout.Label("W/S: Throttle");
-        GUILayout.Label("Mouse: Pitch/Roll");
-        GUILayout.Label("A/D: Yaw");
 
         // Physics state
         GUILayout.Label($"Angular Velocity: {_rb.angularVelocity.magnitude:0.00}");
@@ -271,63 +269,3 @@ public class AircraftController : MonoBehaviour
 }
 
 
-
-/*
-
-Awake()
-- Инициализация компонентов при создании объекта
-- Вызывает настройку Rigidbody и системы ввода
-
-SetupRigidbody()
-- Настраивает физические параметры самолета:
-  - Масса, сопротивление, гравитация
-  - Центр масс
-  - Начальная скорость и позиция
-
-SetupInputActions()
-- Находит и настраивает Actions из Input System
-- Подписывается на события ввода (мышь, клавиатура)
-
-OnEnable()/OnDisable()
-- Включает/выключает обработку ввода при активации объекта
-
-Update()
-- Вызывается каждый кадр
-- Обрабатывает плавное изменение газа (Throttle)
-
-FixedUpdate()
-- Вызывается с фиксированным интервалом для физики
-- Основной цикл применения сил и управления
-
-HandleThrottleInput()
-- Читает ввод W/S и плавно изменяет значение газа (0-1)
-
-ApplyThrust()
-- Создает силу тяги вперед по направлению самолета
-- Зависит от текущего значения газа
-
-ApplyAerodynamicForces()
-- Подъемная сила - вверх относительно самолета
-- Сопротивление - против движения  
-- Боковое сопротивление - убирает боковое скольжение
-
-ApplyFlightControls()
-- Преобразует ввод мыши/клавиш в вращающие моменты:
-  - Pitch - вращение вокруг оси X (нос вверх/вниз)
-  - Roll - вращение вокруг оси Z (крен)
-  - Yaw - вращение вокруг оси Y (повороты)
-
-ApplyVelocityAlignment()
-- Ключевой метод - выравнивает вектор скорости с направлением самолета
-- Создает реалистичную аэродинамику (самолет поворачивает, а не скользит)
-
-ApplyStability()
-- Гасит излишнее вращение для стабильного полета
-
-OnGUI()
-- Отображает телеметрию и отладочную информацию
-
-Основной принцип:
-Ввод -> Вращение -> Выравнивание скорости -> Реалистичный полет
- 
-*/
